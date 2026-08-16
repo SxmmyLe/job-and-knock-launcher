@@ -16,55 +16,52 @@
   <style>
     :root{color-scheme:dark}
     *{box-sizing:border-box}
-    html,body{margin:0;width:100%;height:100%;overflow:hidden;background:#07101f;font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif}
-    #app{position:fixed;inset:0;width:100%;height:100%;border:0;background:#07101f}
-    #splash{position:fixed;inset:0;z-index:20;display:flex;align-items:center;justify-content:center;background:linear-gradient(165deg,#09275f 0%,#07101f 72%);transition:opacity .22s ease}
-    #splash.done{opacity:0;pointer-events:none}
-    .splash-inner{width:min(82vw,360px);text-align:center;color:white;padding:28px}
-    .logo{width:118px;height:118px;border-radius:25%;display:block;margin:0 auto 18px;box-shadow:0 18px 50px rgba(0,0,0,.34)}
-    h1{font-size:28px;margin:0 0 8px;letter-spacing:-.02em}
-    p{margin:0;color:#b9c9e6;font-size:14px;line-height:1.45}
-    .spinner{width:24px;height:24px;border:3px solid rgba(255,255,255,.22);border-top-color:#30d8ff;border-radius:50%;margin:22px auto 0;animation:spin .8s linear infinite}
+    html,body{margin:0;min-height:100%;background:#07101f;font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif;color:#fff}
+    body{min-height:100dvh;display:flex;align-items:center;justify-content:center;background:linear-gradient(165deg,#09275f 0%,#07101f 72%);padding:28px}
+    .card{width:min(88vw,390px);text-align:center;padding:28px 24px;border:1px solid rgba(255,255,255,.10);border-radius:24px;background:rgba(7,16,31,.72);box-shadow:0 24px 70px rgba(0,0,0,.28);backdrop-filter:blur(18px)}
+    .logo{width:128px;height:128px;border-radius:26%;display:block;margin:0 auto 18px;box-shadow:0 18px 50px rgba(0,0,0,.34)}
+    h1{font-size:29px;margin:0 0 8px;letter-spacing:-.025em}
+    p{margin:0;color:#b9c9e6;font-size:14px;line-height:1.5}
+    .hint{margin-top:18px;padding:14px;border-radius:14px;background:rgba(255,255,255,.06);text-align:left;color:#d7e2f4}
+    .hint strong{color:#fff}
+    .button{display:block;margin-top:18px;padding:13px 16px;border-radius:13px;background:#fff;color:#0a2452;text-decoration:none;font-weight:750;font-size:15px}
+    .small{font-size:12px;color:#8296b8;margin-top:12px}
+    .spinner{width:28px;height:28px;border:3px solid rgba(255,255,255,.20);border-top-color:#30d8ff;border-radius:50%;margin:24px auto 0;animation:spin .8s linear infinite}
     @keyframes spin{to{transform:rotate(360deg)}}
-    #slow{display:none;margin-top:24px}
-    #slow.show{display:block}
-    .direct{display:inline-block;margin-top:12px;padding:11px 16px;border-radius:11px;background:#fff;color:#0a2452;text-decoration:none;font-weight:700;font-size:14px}
+    #launching{display:none}
+    .standalone #installing{display:none}
+    .standalone #launching{display:block}
   </style>
 </head>
 <body>
-  <iframe id="app"
-    src="https://script.google.com/macros/s/AKfycbwrrtB4EflChLQNzw1GNAOfDii_eBHTHEakz0NidD3eKgZaXXgZRx63RJ1azz8YucjtEQ/exec?embed=1"
-    title="Job & Knock"
-    allow="clipboard-read; clipboard-write; fullscreen"
-    allowfullscreen></iframe>
+  <div class="card">
+    <img class="logo" src="./icons/icon-180.png" alt="Job & Knock">
 
-  <div id="splash">
-    <div class="splash-inner">
-      <img class="logo" src="./icons/icon-180.png" alt="">
+    <div id="installing">
       <h1>Job & Knock</h1>
-      <p id="status">Opening your invoice workspace…</p>
-      <div class="spinner" id="spinner"></div>
-      <div id="slow">
-        <p>The Google app is taking longer than expected.</p>
-        <a class="direct" href="https://script.google.com/macros/s/AKfycbwrrtB4EflChLQNzw1GNAOfDii_eBHTHEakz0NidD3eKgZaXXgZRx63RJ1azz8YucjtEQ/exec">Open directly</a>
-      </div>
+      <p>This page supplies the proper Home Screen icon. The invoicing app itself remains on Google Apps Script.</p>
+      <div class="hint"><strong>On iPhone:</strong> tap Share → Add to Home Screen. Then open Job & Knock from the new icon.</div>
+      <a class="button" href="https://script.google.com/macros/s/AKfycbwrrtB4EflChLQNzw1GNAOfDii_eBHTHEakz0NidD3eKgZaXXgZRx63RJ1azz8YucjtEQ/exec">Open Job & Knock now</a>
+      <div class="small">Do not add the Google URL itself to the Home Screen.</div>
+    </div>
+
+    <div id="launching">
+      <h1>Job & Knock</h1>
+      <p>Opening your invoice workspace…</p>
+      <div class="spinner"></div>
     </div>
   </div>
 
   <script>
-    const frame=document.getElementById('app');
-    const splash=document.getElementById('splash');
-    const slow=document.getElementById('slow');
+    const APP_URL='https://script.google.com/macros/s/AKfycbwrrtB4EflChLQNzw1GNAOfDii_eBHTHEakz0NidD3eKgZaXXgZRx63RJ1azz8YucjtEQ/exec';
+    const standalone=(window.navigator.standalone===true)||window.matchMedia('(display-mode: standalone)').matches;
 
-    let loaded=false;
-    frame.addEventListener('load',()=>{
-      loaded=true;
-      setTimeout(()=>splash.classList.add('done'),260);
-    });
-
-    setTimeout(()=>{
-      if(!loaded) slow.classList.add('show');
-    },12000);
+    if(standalone){
+      document.documentElement.classList.add('standalone');
+      // Google authentication must run as the top-level page. Putting it in a
+      // cross-site iframe causes Google's OAuth flow to reject the request.
+      setTimeout(()=>window.location.replace(APP_URL),180);
+    }
 
     if('serviceWorker' in navigator){
       window.addEventListener('load',()=>navigator.serviceWorker.register('./sw.js').catch(()=>{}));
