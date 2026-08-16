@@ -21,10 +21,12 @@
     h1{text-align:center;font-size:28px;margin:0 0 7px;letter-spacing:-.025em}
     .lead{text-align:center;margin:0;color:#b9c9e6;font-size:14px;line-height:1.5}
     .notice{margin-top:18px;padding:14px;border-radius:14px;background:rgba(255,255,255,.06);color:#d7e2f4;font-size:13px;line-height:1.45}
-    .button{display:block;text-align:center;margin-top:18px;padding:14px 16px;border-radius:13px;background:#fff;color:#0a2452;text-decoration:none;font-weight:750;font-size:15px}
+    .button{display:block;width:100%;text-align:center;margin-top:18px;padding:14px 16px;border:0;border-radius:13px;background:#fff;color:#0a2452;text-decoration:none;font-weight:750;font-size:15px;font-family:inherit}
+    .button:disabled{opacity:.62}
     .button.secondary{margin-top:10px;background:rgba(255,255,255,.08);color:#fff;border:1px solid rgba(255,255,255,.12)}
     .steps{margin:16px 0 0;padding-left:21px;color:#cbd7eb;font-size:13px;line-height:1.55}
     .small{font-size:11px;color:#8296b8;margin-top:14px;line-height:1.45}
+    #installStatus{min-height:16px;text-align:center}
   </style>
 </head>
 <body>
@@ -35,7 +37,8 @@
 
     <div class="notice"><strong>Why this installer?</strong><br>The normal Add to Home Screen launcher loses standalone mode when it hands off to Google. This profile installs a Web Clip that opens the real Apps Script app full-screen and is allowed to follow Google's redirects without showing Safari controls.</div>
 
-    <a class="button" href="./Job-and-Knock.mobileconfig">Install Full-Screen App</a>
+    <button class="button" id="installProfile">Install Full-Screen App</button>
+    <div class="small" id="installStatus">Preparing iPhone profile installer…</div>
     <ol class="steps">
       <li>Tap the button above in Safari.</li>
       <li>Open Settings and tap <strong>Profile Downloaded</strong>.</li>
@@ -47,5 +50,53 @@
 
     <div class="small">The profile contains one removable Home Screen Web Clip only. It does not configure accounts, VPN, certificates, passcodes, or device restrictions. You can remove it later in Settings → General → VPN & Device Management.</div>
   </div>
+
+  <script>
+    const installBtn=document.getElementById('installProfile');
+    const installStatus=document.getElementById('installStatus');
+
+    async function ensureInstallerReady(){
+      if(!('serviceWorker' in navigator)){
+        installStatus.textContent='This installer requires Safari service-worker support.';
+        installBtn.disabled=true;
+        return false;
+      }
+      try{
+        const reg=await navigator.serviceWorker.register('./sw.js');
+        try{await reg.update()}catch(e){}
+        await navigator.serviceWorker.ready;
+
+        if(!navigator.serviceWorker.controller){
+          await new Promise(resolve=>{
+            let done=false;
+            const finish=()=>{if(done)return;done=true;resolve()};
+            navigator.serviceWorker.addEventListener('controllerchange',finish,{once:true});
+            setTimeout(finish,1800);
+          });
+        }
+
+        if(!navigator.serviceWorker.controller){
+          installStatus.textContent='Installer updated — reload this page once, then tap Install.';
+          return false;
+        }
+        installStatus.textContent='Installer ready.';
+        return true;
+      }catch(e){
+        installStatus.textContent='Could not prepare the installer. Reload Safari and try again.';
+        return false;
+      }
+    }
+
+    installBtn.addEventListener('click',async()=>{
+      installBtn.disabled=true;
+      installStatus.textContent='Preparing profile…';
+      const ready=await ensureInstallerReady();
+      installBtn.disabled=false;
+      if(!ready)return;
+      window.location.href='./install/Job-and-Knock.mobileconfig?v=2';
+    });
+
+    ensureInstallerReady();
+  </script>
 </body>
 </html>
