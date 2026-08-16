@@ -1,4 +1,4 @@
-const CACHE='job-knock-launcher-v2';
+const CACHE='job-knock-launcher-v3';
 const SHELL=['./','./index.html','./manifest.webmanifest','./icons/icon-180.png'];
 
 self.addEventListener('install',event=>{
