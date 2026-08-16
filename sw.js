@@ -1,5 +1,5 @@
-const CACHE='job-knock-launcher-v4';
-const SHELL=['./','./index.html','./manifest.webmanifest','./icons/job-and-knock-180.png'];
+const CACHE='job-knock-launcher-v5';
+const SHELL=['./','./index.html','./manifest.webmanifest','./icons/job-and-knock-icon-v2.png'];
 
 self.addEventListener('install',event=>{
   event.waitUntil(caches.open(CACHE).then(c=>c.addAll(SHELL)));
