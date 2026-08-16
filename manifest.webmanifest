@@ -10,7 +10,7 @@
   "theme_color": "#071b46",
   "icons": [
     {
-      "src": "./icons/job-and-knock-180.png",
+      "src": "./icons/job-and-knock-icon-v2.png",
       "sizes": "180x180",
       "type": "image/png",
       "purpose": "any"
