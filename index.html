@@ -10,8 +10,8 @@
   <title>Job & Knock</title>
 
   <link rel="manifest" href="./manifest.webmanifest">
-  <link rel="apple-touch-icon" sizes="180x180" href="./icons/job-and-knock-180.png">
-  <link rel="icon" type="image/png" sizes="180x180" href="./icons/job-and-knock-180.png">
+  <link rel="apple-touch-icon" sizes="180x180" href="./icons/job-and-knock-icon-v2.png">
+  <link rel="icon" type="image/png" sizes="180x180" href="./icons/job-and-knock-icon-v2.png">
 
   <style>
     :root{color-scheme:dark}
@@ -35,7 +35,7 @@
 </head>
 <body>
   <div class="card">
-    <img class="logo" src="./icons/job-and-knock-180.png" alt="Job & Knock">
+    <img class="logo" src="./icons/job-and-knock-icon-v2.png" alt="Job & Knock">
 
     <div id="installing">
       <h1>Job & Knock</h1>
@@ -58,8 +58,6 @@
 
     if(standalone){
       document.documentElement.classList.add('standalone');
-      // Google authentication must run as the top-level page. Putting it in a
-      // cross-site iframe causes Google's OAuth flow to reject the request.
       setTimeout(()=>window.location.replace(APP_URL),180);
     }
 
