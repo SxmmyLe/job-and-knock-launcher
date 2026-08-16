@@ -8,62 +8,44 @@
   <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
   <meta name="apple-mobile-web-app-title" content="Job & Knock">
   <title>Job & Knock</title>
-
   <link rel="manifest" href="./manifest.webmanifest">
   <link rel="apple-touch-icon" sizes="180x180" href="./icons/job-and-knock-icon-v2.png">
   <link rel="icon" type="image/png" sizes="180x180" href="./icons/job-and-knock-icon-v2.png">
-
   <style>
     :root{color-scheme:dark}
     *{box-sizing:border-box}
     html,body{margin:0;min-height:100%;background:#07101f;font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif;color:#fff}
     body{min-height:100dvh;display:flex;align-items:center;justify-content:center;background:linear-gradient(165deg,#09275f 0%,#07101f 72%);padding:28px}
-    .card{width:min(88vw,390px);text-align:center;padding:28px 24px;border:1px solid rgba(255,255,255,.10);border-radius:24px;background:rgba(7,16,31,.72);box-shadow:0 24px 70px rgba(0,0,0,.28);backdrop-filter:blur(18px)}
-    .logo{width:128px;height:128px;border-radius:26%;display:block;margin:0 auto 18px;box-shadow:0 18px 50px rgba(0,0,0,.34)}
-    h1{font-size:29px;margin:0 0 8px;letter-spacing:-.025em}
-    p{margin:0;color:#b9c9e6;font-size:14px;line-height:1.5}
-    .hint{margin-top:18px;padding:14px;border-radius:14px;background:rgba(255,255,255,.06);text-align:left;color:#d7e2f4}
-    .hint strong{color:#fff}
-    .button{display:block;margin-top:18px;padding:13px 16px;border-radius:13px;background:#fff;color:#0a2452;text-decoration:none;font-weight:750;font-size:15px}
-    .small{font-size:12px;color:#8296b8;margin-top:12px}
-    .spinner{width:28px;height:28px;border:3px solid rgba(255,255,255,.20);border-top-color:#30d8ff;border-radius:50%;margin:24px auto 0;animation:spin .8s linear infinite}
-    @keyframes spin{to{transform:rotate(360deg)}}
-    #launching{display:none}
-    .standalone #installing{display:none}
-    .standalone #launching{display:block}
+    .card{width:min(90vw,410px);padding:26px 22px;border:1px solid rgba(255,255,255,.10);border-radius:24px;background:rgba(7,16,31,.74);box-shadow:0 24px 70px rgba(0,0,0,.28);backdrop-filter:blur(18px)}
+    .logo{width:116px;height:116px;border-radius:25%;display:block;margin:0 auto 16px;box-shadow:0 18px 50px rgba(0,0,0,.34)}
+    h1{text-align:center;font-size:28px;margin:0 0 7px;letter-spacing:-.025em}
+    .lead{text-align:center;margin:0;color:#b9c9e6;font-size:14px;line-height:1.5}
+    .notice{margin-top:18px;padding:14px;border-radius:14px;background:rgba(255,255,255,.06);color:#d7e2f4;font-size:13px;line-height:1.45}
+    .button{display:block;text-align:center;margin-top:18px;padding:14px 16px;border-radius:13px;background:#fff;color:#0a2452;text-decoration:none;font-weight:750;font-size:15px}
+    .button.secondary{margin-top:10px;background:rgba(255,255,255,.08);color:#fff;border:1px solid rgba(255,255,255,.12)}
+    .steps{margin:16px 0 0;padding-left:21px;color:#cbd7eb;font-size:13px;line-height:1.55}
+    .small{font-size:11px;color:#8296b8;margin-top:14px;line-height:1.45}
   </style>
 </head>
 <body>
   <div class="card">
     <img class="logo" src="./icons/job-and-knock-icon-v2.png" alt="Job & Knock">
+    <h1>Job & Knock</h1>
+    <p class="lead">Install the full-screen iPhone version with the proper Home Screen icon.</p>
 
-    <div id="installing">
-      <h1>Job & Knock</h1>
-      <p>This page supplies the proper Home Screen icon. The invoicing app itself remains on Google Apps Script.</p>
-      <div class="hint"><strong>On iPhone:</strong> tap Share → Add to Home Screen. Then open Job & Knock from the new icon.</div>
-      <a class="button" href="https://script.google.com/macros/s/AKfycbwrrtB4EflChLQNzw1GNAOfDii_eBHTHEakz0NidD3eKgZaXXgZRx63RJ1azz8YucjtEQ/exec">Open Job & Knock now</a>
-      <div class="small">Do not add the Google URL itself to the Home Screen.</div>
-    </div>
+    <div class="notice"><strong>Why this installer?</strong><br>The normal Add to Home Screen launcher loses standalone mode when it hands off to Google. This profile installs a Web Clip that opens the real Apps Script app full-screen and is allowed to follow Google's redirects without showing Safari controls.</div>
 
-    <div id="launching">
-      <h1>Job & Knock</h1>
-      <p>Opening your invoice workspace…</p>
-      <div class="spinner"></div>
-    </div>
+    <a class="button" href="./Job-and-Knock.mobileconfig">Install Full-Screen App</a>
+    <ol class="steps">
+      <li>Tap the button above in Safari.</li>
+      <li>Open Settings and tap <strong>Profile Downloaded</strong>.</li>
+      <li>Tap <strong>Install</strong> and confirm.</li>
+      <li>Launch <strong>Job & Knock</strong> from the new Home Screen icon.</li>
+    </ol>
+
+    <a class="button secondary" href="https://script.google.com/macros/s/AKfycbwrrtB4EflChLQNzw1GNAOfDii_eBHTHEakz0NidD3eKgZaXXgZRx63RJ1azz8YucjtEQ/exec">Open App Directly</a>
+
+    <div class="small">The profile contains one removable Home Screen Web Clip only. It does not configure accounts, VPN, certificates, passcodes, or device restrictions. You can remove it later in Settings → General → VPN & Device Management.</div>
   </div>
-
-  <script>
-    const APP_URL='https://script.google.com/macros/s/AKfycbwrrtB4EflChLQNzw1GNAOfDii_eBHTHEakz0NidD3eKgZaXXgZRx63RJ1azz8YucjtEQ/exec';
-    const standalone=(window.navigator.standalone===true)||window.matchMedia('(display-mode: standalone)').matches;
-
-    if(standalone){
-      document.documentElement.classList.add('standalone');
-      setTimeout(()=>window.location.replace(APP_URL),180);
-    }
-
-    if('serviceWorker' in navigator){
-      window.addEventListener('load',()=>navigator.serviceWorker.register('./sw.js').catch(()=>{}));
-    }
-  </script>
 </body>
 </html>
